@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#123b35"><title>SMART ASSESSMENT CBT — SMP Negeri 1 Teluk Pakedai</title>
+<link rel="manifest" href="./manifest.webmanifest">
+<style>
+:root{--navy:#123b35;--green:#159b72;--gold:#d6ad50;--bg:#f3f7f5;--ink:#18332d;--muted:#71817b;--line:#e1eae5;--red:#b94b4b}
+*{box-sizing:border-box}body{margin:0;font:15px system-ui,Segoe UI,sans-serif;background:var(--bg);color:var(--ink)}button,input,select,textarea{font:inherit}button{cursor:pointer;border:0;border-radius:9px;padding:10px 14px;background:var(--green);color:white;font-weight:650}.secondary{background:#e8f3ed;color:var(--navy)}.danger{background:#fff0f0;color:var(--red)}.wrap{max-width:1150px;margin:auto;padding:22px}.top{background:var(--navy);color:white;padding:17px 22px;display:flex;justify-content:space-between;align-items:center;gap:15px}.top small{color:#c4dfd2}.card{background:white;border:1px solid var(--line);border-radius:15px;padding:20px;margin:16px 0;box-shadow:0 10px 30px #123b350c}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.field{display:grid;gap:6px}.field label{font-size:12px;font-weight:700;color:#52645d}.field input,.field select,.field textarea{width:100%;padding:11px;border:1px solid var(--line);border-radius:9px;background:#fff}.field textarea{min-height:90px}.full{grid-column:1/-1}.hidden{display:none!important}.muted{color:var(--muted);font-size:13px}.row{display:flex;gap:9px;align-items:center;flex-wrap:wrap}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:15px 0}.tabs button{background:#e8f3ed;color:var(--navy)}.tabs button.active{background:var(--navy);color:white}.notice{padding:12px;border-radius:10px;background:#fff8e7;border:1px solid #efdfb6;color:#745c24;font-size:13px;line-height:1.5}.ok{background:#eaf7ef;border-color:#cce8d6;color:#236342}.examq{border:1px solid var(--line);border-radius:12px;padding:16px;margin:12px 0}.opt{display:block;padding:9px;border:1px solid var(--line);border-radius:9px;margin:7px 0}.opt input{margin-right:8px}table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:10px;border-bottom:1px solid var(--line)}th{background:#f7faf8;color:var(--muted)}.pill{font-size:11px;border-radius:20px;padding:4px 8px;background:#e8f3ed;color:#176348}.foot{text-align:center;color:#84928c;font-size:11px;padding:25px}@media(max-width:650px){.grid{grid-template-columns:1fr}.full{grid-column:auto}.wrap{padding:12px}.top{align-items:flex-start;flex-direction:column}}
+</style>
+</head>
+<body>
+<header class="top"><div><b>SMART ASSESSMENT CBT</b><br><small>SMP Negeri 1 Teluk Pakedai · Tahap 2</small></div><div class="row"><span id="who" class="muted"></span><button id="logoutBtn" class="secondary hidden">Keluar</button></div></header>
+<main class="wrap">
+<section id="setupNotice" class="notice">Aplikasi perlu dikonfigurasi dengan Project URL dan anon key Supabase. Isi file <b>config.js</b> setelah membuat proyek Supabase. Jangan pernah memasukkan service_role key ke aplikasi browser.</section>
+<section id="authCard" class="card">
+<h2>Masuk ke SMART ASSESSMENT CBT</h2><p class="muted">Gunakan akun yang telah dibuat oleh administrator sekolah.</p>
+<div class="grid">
+<div class="field"><label>Email akun</label><input id="email" type="email" autocomplete="username" placeholder="nama@sekolah.sch.id"></div>
+<div class="field"><label>Password</label><input id="password" type="password" autocomplete="current-password"></div>
+</div><div class="row" style="margin-top:14px"><button id="loginBtn">Masuk</button><button id="signupBtn" class="secondary">Daftar akun siswa</button></div>
+<p id="authMsg" class="muted"></p>
+</section>
+<section id="appPanel" class="hidden">
+<div class="card"><div class="row" style="justify-content:space-between"><div><h2 id="hello">Panel CBT</h2><p class="muted" id="roleLabel"></p></div><span class="pill" id="connection">Memeriksa koneksi…</span></div></div>
+<nav id="teacherTabs" class="tabs hidden"><button data-tab="create" class="active">Buat ujian</button><button data-tab="manage">Daftar ujian & tautan</button><button data-tab="results">Hasil siswa</button></nav>
+<section id="teacherCreate" class="card hidden">
+<h3>Pembuatan ujian</h3><div class="grid">
+<div class="field"><label>Nama ujian</label><input id="examTitle" placeholder="Asesmen Sumatif IPS"></div>
+<div class="field"><label>Mata pelajaran</label><input id="examSubject" value="IPS"></div>
+<div class="field"><label>Kelas</label><input id="examClass" placeholder="VIII A"></div>
+<div class="field"><label>Durasi (menit)</label><input id="examDuration" type="number" min="1" value="60"></div>
+<div class="field"><label>Mulai (opsional)</label><input id="examStart" type="datetime-local"></div>
+<div class="field"><label>Selesai (opsional)</label><input id="examEnd" type="datetime-local"></div>
+<div class="field full"><label>Petunjuk</label><textarea id="examInstructions" placeholder="Bacalah soal dengan teliti…"></textarea></div>
+</div>
+<hr style="border:0;border-top:1px solid var(--line);margin:20px 0">
+<h3>Tambah soal</h3><div class="grid">
+<div class="field full"><label>Pertanyaan</label><textarea id="qText" placeholder="Tuliskan pertanyaan…"></textarea></div>
+<div class="field"><label>Jenis soal</label><select id="qType"><option value="mcq">Pilihan ganda</option><option value="essay">Esai</option></select></div>
+<div class="field"><label>Bobot</label><input id="qWeight" type="number" min="1" value="1"></div>
+<div class="field"><label>Opsi A</label><input id="optA"></div><div class="field"><label>Opsi B</label><input id="optB"></div>
+<div class="field"><label>Opsi C</label><input id="optC"></div><div class="field"><label>Opsi D</label><input id="optD"></div>
+<div class="field"><label>Opsi E (opsional)</label><input id="optE"></div><div class="field"><label>Kunci jawaban</label><select id="qKey"><option value="">Pilih kunci</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option></select></div>
+</div><div class="row" style="margin-top:12px"><button id="addQBtn" class="secondary">Tambah ke daftar soal</button><span class="muted" id="qCount">0 soal ditambahkan</span></div>
+<div id="draftQuestions"></div><div class="row"><button id="publishExamBtn">Simpan & terbitkan ujian</button></div><p id="createMsg" class="muted"></p>
+</section>
+<section id="teacherManage" class="card hidden"><h3>Ujian dan pembagian tautan</h3><div id="examList" class="muted">Memuat ujian…</div></section>
+<section id="teacherResults" class="card hidden"><h3>Hasil dan penilaian</h3><div id="resultsList" class="muted">Pilih menu hasil untuk memuat data.</div></section>
+<section id="studentPanel" class="card hidden"><h3>Masuk ruang ujian</h3><p class="muted">Pastikan menggunakan akun siswa yang terdaftar. Token dibagikan oleh guru.</p><div class="grid"><div class="field full"><label>Token ujian</label><input id="examToken" placeholder="Masukkan token dari guru"></div></div><button id="startExamBtn" style="margin-top:12px">Mulai ujian</button><p id="studentMsg" class="muted"></p><div id="examWorkspace" class="hidden"></div></section>
+</section>
+</main><footer class="foot">SMART ASSESSMENT CBT · SMP Negeri 1 Teluk Pakedai</footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="./config.js"></script>
+<script>
+const $=id=>document.getElementById(id);let sb=null,user=null,profile=null,draft=[],activeAttempt=null,activeQuestions=[];
+const cfg=window.CBT_CONFIG||{};
+if(cfg.url&&cfg.anonKey&&window.supabase){sb=window.supabase.createClient(cfg.url,cfg.anonKey);$("setupNotice").classList.add("hidden");}
+function msg(id,t){$(id).textContent=t||""}
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function online(){ $("connection").textContent=navigator.onLine?"Online":"Offline · jawaban disimpan sementara";$("connection").className="pill"}
+window.addEventListener("online",online);window.addEventListener("offline",online);online();
+async function authRefresh(){if(!sb)return;const {data:{session}}=await sb.auth.getSession();if(session){user=session.user;await loadProfile();}else showAuth()}
+function showAuth(){$("authCard").classList.remove("hidden");$("appPanel").classList.add("hidden");$("logoutBtn").classList.add("hidden")}
+async function loadProfile(){const {data,error}=await sb.from("profiles").select("*").eq("id",user.id).single();if(error){msg("authMsg","Profil belum tersedia. Hubungi administrator sekolah.");return}profile=data;$("authCard").classList.add("hidden");$("appPanel").classList.remove("hidden");$("logoutBtn").classList.remove("hidden");$("who").textContent=data.full_name||user.email;$("hello").textContent="Selamat datang, "+(data.full_name||"Pengguna");$("roleLabel").textContent="Peran: "+data.role+" · Kelas: "+(data.class_name||"-");if(data.role==="teacher"||data.role==="admin"){ $("teacherTabs").classList.remove("hidden");showTab("create");}else{$("studentPanel").classList.remove("hidden");}}
+$("loginBtn").onclick=async()=>{if(!sb)return msg("authMsg","Konfigurasi Supabase belum diisi.");const {error}=await sb.auth.signInWithPassword({email:$("email").value.trim(),password:$("password").value});msg("authMsg",error?error.message:"Berhasil masuk.");if(!error)await authRefresh()};
+$("signupBtn").onclick=async()=>{if(!sb)return msg("authMsg","Konfigurasi Supabase belum diisi.");const email=$("email").value.trim(),password=$("password").value;if(!email||password.length<8)return msg("authMsg","Isi email dan password minimal 8 karakter.");const {error}=await sb.auth.signUp({email,password,options:{data:{full_name:email.split("@")[0]}}});msg("authMsg",error?error.message:"Pendaftaran diterima. Verifikasi email jika diminta, lalu minta administrator mengaktifkan profil dan kelas Anda.")};
+$("logoutBtn").onclick=async()=>{await sb.auth.signOut();user=null;profile=null;showAuth()};
+function showTab(tab){["create","manage","results"].forEach(t=>{$("teacher"+t[0].toUpperCase()+t.slice(1)).classList.toggle("hidden",t!==tab)});document.querySelectorAll("#teacherTabs button").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));if(tab==="manage")loadExams();if(tab==="results")loadResults()}
+document.querySelectorAll("#teacherTabs button").forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
+$("qType").onchange=()=>{let essay=$("qType").value==="essay";["optA","optB","optC","optD","optE","qKey"].forEach(id=>$(id).parentElement.classList.toggle("hidden",essay))};
+$("addQBtn").onclick=()=>{let type=$("qType").value,text=$("qText").value.trim(),weight=Number($("qWeight").value)||1;if(!text)return msg("createMsg","Pertanyaan harus diisi.");let options=type==="mcq"?{A:$("optA").value.trim(),B:$("optB").value.trim(),C:$("optC").value.trim(),D:$("optD").value.trim(),E:$("optE").value.trim()}:{};if(type==="mcq"&&(!options.A||!options.B||!["A","B","C","D","E"].includes($("qKey").value)||!options[$("qKey").value]))return msg("createMsg","Isi minimal opsi A dan B serta kunci yang sesuai.");draft.push({question_text:text,question_type:type,options,answer_key:type==="mcq"?$("qKey").value:null,weight});$("qText").value="";["optA","optB","optC","optD","optE"].forEach(id=>$(id).value="");$("qKey").value="";renderDraft()};
+function renderDraft(){$("qCount").textContent=draft.length+" soal ditambahkan";$("draftQuestions").innerHTML=draft.map((q,i)=>`<div class="examq"><b>${i+1}. ${esc(q.question_text)}</b><div class="muted">${q.question_type==="mcq"?"Pilihan ganda":"Esai"} · Bobot ${q.weight}</div>${q.question_type==="mcq"?Object.entries(q.options).filter(([k,v])=>v).map(([k,v])=>`<div class="muted">${k}. ${esc(v)}</div>`).join(""):""}<div class="muted">Kunci: ${esc(q.answer_key||"Dinilai guru")}</div><button class="danger" onclick="removeDraft(${i})">Hapus</button></div>`).join("")}
+window.removeDraft=i=>{draft.splice(i,1);renderDraft()};
+$("publishExamBtn").onclick=async()=>{if(!sb)return;let title=$("examTitle").value.trim();if(!title||!draft.length)return msg("createMsg","Isi nama ujian dan tambahkan minimal satu soal.");let token=Array.from(crypto.getRandomValues(new Uint8Array(6))).map(x=>x.toString(16).padStart(2,"0")).join("").toUpperCase();let payload={title,subject:$("examSubject").value.trim(),class_name:$("examClass").value.trim(),duration_minutes:Number($("examDuration").value)||60,instructions:$("examInstructions").value,start_at:$("examStart").value?new Date($("examStart").value).toISOString():null,end_at:$("examEnd").value?new Date($("examEnd").value).toISOString():null,token,status:"published",created_by:user.id};let {data:exam,error}=await sb.from("exams").insert(payload).select().single();if(error)return msg("createMsg",error.message);let qs=draft.map((q,i)=>({...q,exam_id:exam.id,position:i+1}));let result=await sb.from("questions").insert(qs);if(result.error){await sb.from("exams").delete().eq("id",exam.id);return msg("createMsg","Gagal menyimpan soal: "+result.error.message)}draft=[];renderDraft();msg("createMsg","Ujian diterbitkan. Token: "+token+" · Tautan: "+location.origin+location.pathname+"?exam="+exam.id);};
+async function loadExams(){let {data,error}=await sb.from("exams").select("id,title,subject,class_name,duration_minutes,token,status,created_at").order("created_at",{ascending:false});if(error)return $("examList").textContent=error.message;$("examList").innerHTML=data.length?`<table><tr><th>Ujian</th><th>Kelas</th><th>Token</th><th>Tautan</th></tr>${data.map(e=>`<tr><td>${esc(e.title)}<br><small>${esc(e.subject)}</small></td><td>${esc(e.class_name)}</td><td><b>${esc(e.token)}</b></td><td><button class="secondary" onclick="copyLink('${e.id}')">Salin tautan</button></td></tr>`).join("")}</table>`:"Belum ada ujian."}
+window.copyLink=id=>{navigator.clipboard.writeText(location.origin+location.pathname+"?exam="+id);alert("Tautan disalin. Bagikan juga token ujian secara terpisah kepada siswa.")};
+async function loadResults(){let {data,error}=await sb.from("attempts").select("id,student_id,exam_id,status,score,started_at,submitted_at,profiles(full_name),exams(title)").order("started_at",{ascending:false});if(error)return $("resultsList").textContent=error.message;$("resultsList").innerHTML=data.length?`<table><tr><th>Siswa</th><th>Ujian</th><th>Status</th><th>Nilai PG</th></tr>${data.map(a=>`<tr><td>${esc(a.profiles?.full_name||a.student_id)}</td><td>${esc(a.exams?.title||"-")}</td><td>${esc(a.status)}</td><td>${a.score??"Menunggu esai"}</td></tr>`).join("")}</table>`:"Belum ada jawaban siswa."}
+$("startExamBtn").onclick=async()=>{if(!sb)return;msg("studentMsg","Memvalidasi token…");let {data,error}=await sb.rpc("start_exam",{p_token:$("examToken").value.trim().toUpperCase()});if(error)return msg("studentMsg",error.message);activeAttempt=data.attempt_id;activeQuestions=data.questions||[];renderExam(data)};
+function renderExam(data){$("examWorkspace").classList.remove("hidden");$("examWorkspace").innerHTML=`<div class="notice ok"><b>${esc(data.title)}</b><br>${esc(data.instructions||"Kerjakan dengan teliti.")}<br>Durasi ${data.duration_minutes} menit</div>${activeQuestions.map((q,i)=>`<div class="examq"><b>${i+1}. ${esc(q.question_text)}</b>${q.question_type==="mcq"?Object.entries(q.options||{}).filter(([k,v])=>v).map(([k,v])=>`<label class="opt"><input type="radio" name="ans${q.id}" value="${k}" onchange="saveAns('${q.id}',this.value)"> ${k}. ${esc(v)}</label>`).join(""):`<textarea style="width:100%;min-height:100px" onchange="saveAns('${q.id}',this.value)" placeholder="Tulis jawaban esai…"></textarea>`}</div>`).join("")}<button id="submitExamBtn">Kirim jawaban</button><p class="muted">Jawaban tersimpan otomatis saat koneksi tersedia. Jika koneksi terputus, jawaban ditahan di perangkat dan dikirim kembali saat online.</p>`;$("submitExamBtn").onclick=submitExam}
+window.saveAns=async(qid,value)=>{localStorage.setItem("cbt-answer-"+activeAttempt+"-"+qid,value);if(navigator.onLine){const {error}=await sb.rpc("save_answer",{p_attempt_id:activeAttempt,p_question_id:qid,p_answer:value});if(error)msg("studentMsg","Jawaban tersimpan lokal; sinkronisasi tertunda.");else msg("studentMsg","Jawaban tersimpan.");}};
+async function syncAnswers(){if(!sb||!activeAttempt||!navigator.onLine)return;for(const q of activeQuestions){let v=localStorage.getItem("cbt-answer-"+activeAttempt+"-"+q.id);if(v!==null)await sb.rpc("save_answer",{p_attempt_id:activeAttempt,p_question_id:q.id,p_answer:v});}}
+window.addEventListener("online",syncAnswers);
+async function submitExam(){await syncAnswers();let {data,error}=await sb.rpc("submit_exam",{p_attempt_id:activeAttempt});if(error)return msg("studentMsg",error.message);$("examWorkspace").innerHTML=`<div class="student-result"><b>Jawaban berhasil dikirim.</b><span>Nilai pilihan ganda: ${data.score_pg??"Menunggu pemeriksaan"} · Status: ${esc(data.status)}</span></div>`;msg("studentMsg","Ujian selesai. Jangan tutup aplikasi sebelum konfirmasi ini muncul.")}
+const params=new URLSearchParams(location.search);if(params.get("exam"))$("examToken").value="";
+if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+if(sb)authRefresh();
+</script></body></html>

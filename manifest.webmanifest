@@ -1,0 +1,9 @@
+{
+  "name": "SMART ASSESSMENT CBT - SMP Negeri 1 Teluk Pakedai",
+  "short_name": "SMART CBT",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f3f7f5",
+  "theme_color": "#123b35",
+  "icons": []
+}
